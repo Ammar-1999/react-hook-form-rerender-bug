@@ -6,11 +6,9 @@ import {
   useFormContext,
 } from "react-hook-form";
 
-const InputControlled = memo(
-  forwardRef((props: any, ref) => {
-    return <input {...props} ref={ref} />;
-  })
-);
+const InputControlled = memo(({ field }: { field: any }) => {
+  return <input {...field} ref={null} />;
+});
 
 const ControllerInput = memo(
   ({ control, index }: { control: Control<any>; index: number }) => {
@@ -18,18 +16,15 @@ const ControllerInput = memo(
       <Controller
         control={control}
         name={`array.${index}.firstName`}
-        render={({ field }) => (
-          <InputControlled field={field} ref={field.ref} />
-        )}
+        render={({ field }) => <InputControlled field={field} />}
       />
     );
   }
 );
 
-const Input = forwardRef((props: any, ref) => {
-  return <input type="text" {...props} ref={ref} />;
+const Input = memo((props: any) => {
+  return <input type="text" {...props} />;
 });
-
 const Edit = memo(({ index }: { index: number }) => {
   const { register, control } = useFormContext();
 
@@ -39,14 +34,9 @@ const Edit = memo(({ index }: { index: number }) => {
       <Controller
         control={control}
         name={`array.${index}.lastName`}
-        render={({ field }) => (
-          <InputControlled field={field} ref={field.ref} />
-        )}
+        render={({ field }) => <InputControlled field={field} />}
       />
-      <Input
-        {...register(`array.${index}.working`)}
-        ref={register(`array.${index}.working`).ref}
-      />
+      <Input {...register(`array.${index}.working`)} ref={null} />
     </div>
   );
 });
